@@ -1,14 +1,6 @@
 var restify = require('restify');
 var mongoose = require('mongoose');
-var item = require('./item.js');
-
-// Connect to the database
-mongoose.connect('mongodb://prioriTz:PeopleAndData2016@ds015915.mlab.com:15915/prioritz');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-	console.log('Connected');
-});
+var mongodb = require('./mongodb.js');
 
 // function respond(req, res, next) {
 //   res.send('hello ' + req.params.name);
@@ -18,13 +10,12 @@ db.once('open', function() {
 var server = restify.createServer({
 	name: 'prioriTzAPI'
 });
-// server.get('/hello/:name', respond);
-// server.head('/hello/:name', respond);
-
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
-  item.debug();
+  mongodb.connect();
 });
+// server.get('/hello/:name', respond);
+// server.head('/hello/:name', respond);
 
 
 function send(req, res, next) {

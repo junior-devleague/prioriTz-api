@@ -1,7 +1,17 @@
 var mongoose = require('mongoose');
+var db = mongoose.createConnection('mongodb://prioriTz:PeopleAndData2016@ds015915.mlab.com:15915/prioritz');
 
-function create(name, description, location, dateCreated, dateDue, urgency, difficulty, isHardGoal) {
-	var Item = mongoose.model('Item', animalSchema);
+function connect() {
+	db.on('error', console.error.bind(console, 'connection error:'));
+	db.once('open', function() {
+		console.log('Connected');
+	  	registerSchema();
+	  	console.log(createItem("Blank name", "This is a description", "", new Date(), new Date(), 5, 2, false));
+	});
+}
+
+function createItem(name, description, location, dateCreated, dateDue, urgency, difficulty, isHardGoal) {
+	var Item = db.model('Item');
 	var createdItem = new Item({
 		name: name,
 		description: description,
@@ -13,11 +23,12 @@ function create(name, description, location, dateCreated, dateDue, urgency, diff
 		isHardGoal: isHardGoal
 	});
 
-	createdItem.save(function(err, fluffy) {
+	createdItem.save(function(err, dateCreated) {
 		if (err) {
 			return console.error(err);
 		}
 	});
+	return createdItem;
 }
 
 function registerSchema() {
@@ -34,12 +45,8 @@ function registerSchema() {
 	var Item = mongoose.model('Item', itemSchema);
 }
 
-function debug() {
-	console.log('It worked');
-}
-
 module.exports = {
-	create: create,
-	registerSchema: registerSchema,
-	debug: debug
+	connect: connect,
+	createItem: createItem,
+	registerSchema: registerSchema
 }
