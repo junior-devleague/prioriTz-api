@@ -20,6 +20,7 @@ server.post('/item', function(req, res, next) {
     });
     return next();
 });
+
 server.put('/item/:_id', function(req, res, next) {
     mongodb.updateItem(req.params._id, req.body, function(err, result) {
         if (err) {
@@ -29,6 +30,7 @@ server.put('/item/:_id', function(req, res, next) {
     });
     return next();
 });
+
 server.get('/item/:_id', function(req, res, next) {
     mongodb.getItem(req.params._id, function(err, result) {
         if (err) {
@@ -38,6 +40,16 @@ server.get('/item/:_id', function(req, res, next) {
     });
     return next();
 });;
+server.get('/item', function(req, res, next) {
+    mongodb.getAllItems(function(err, result) {
+        if (err) {
+            res.send(err);
+        }
+        res.send(200, result);
+    });
+    return next();
+});;
+
 server.del('/item/:_id', function(req, res, next) {
     mongodb.delItem(req.params._id, function(err) {
         if (err) {

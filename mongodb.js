@@ -35,6 +35,11 @@ function getItem(id, callback) {
 	Item.findOne({ _id: id }, callback);
 }
 
+function getAllItems(callback) {
+	var Item = db.model('Item');
+	Item.find({}, callback);
+}
+
 function delItem(id, callback) {
 	var Item = db.model('Item');
 	Item.remove({ _id: id }, callback);
@@ -59,6 +64,7 @@ module.exports = {
 	createItem: createItem,
 	updateItem: updateItem,
 	getItem: getItem,
+	getAllItems: getAllItems,
 	delItem: delItem,
 	registerSchema: registerSchema
 }
