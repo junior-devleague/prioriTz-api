@@ -2,11 +2,13 @@ var restify = require('restify');
 var mongoose = require('mongoose');
 var mongodb = require('./mongodb.js');
 
+var PORT = process.env.PORT || 8080;
+
 var server = restify.createServer({
     name: 'prioriTzAPI'
 });
 server.use(restify.bodyParser());
-server.listen(8080, function() {
+server.listen(PORT, function() {
     console.log('%s listening at %s', server.name, server.url);
     mongodb.connect();
 });
