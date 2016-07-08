@@ -2,34 +2,48 @@ var restify = require('restify');
 var mongoose = require('mongoose');
 var mongodb = require('./mongodb.js');
 
-// function respond(req, res, next) {
-//   res.send('hello ' + req.params.name);
-//   next();
-// }
-
 var server = restify.createServer({
-	name: 'prioriTzAPI'
+    name: 'prioriTzAPI'
 });
+server.use(restify.bodyParser());
 server.listen(8080, function() {
-  console.log('%s listening at %s', server.name, server.url);
-  mongodb.connect();
+    console.log('%s listening at %s', server.name, server.url);
+    mongodb.connect();
 });
-// server.get('/hello/:name', respond);
-// server.head('/hello/:name', respond);
 
-
-function send(req, res, next) {
-  res.send('hello ' + req.params.name);
-  return next();
-}
-
-server.post('/hello', function create(req, res, next) {
-  res.send(201, Math.random().toString(36).substr(3, 8));
-  return next();
+server.post('/item', function(req, res, next) {
+    mongodb.createItem(req.body, function(err, result) {
+        if (err) {
+            res.send(err);
+        }
+        res.send(201, result);
+    });
+    return next();
 });
-server.put('/hello', send);
-server.get('/hello/:name', send);
-server.del('hello/:name', function rm(req, res, next) {
-  res.send(204);
-  return next();
+server.put('/item/:_id', function(req, res, next) {
+    mongodb.updateItem(req.params._id, req.body, function(err, result) {
+        if (err) {
+            res.send(err);
+        }
+        res.send(201, result);
+    });
+    return next();
+});
+server.get('/item/:_id', function(req, res, next) {
+    mongodb.getItem(req.params._id, function(err, result) {
+        if (err) {
+            res.send(err);
+        }
+        res.send(200, result);
+    });
+    return next();
+});;
+server.del('/item/:_id', function(req, res, next) {
+    mongodb.delItem(req.params._id, function(err) {
+        if (err) {
+            res.send(err);
+        }
+        res.send(200, { success: true });
+    });
+    return next();
 });
