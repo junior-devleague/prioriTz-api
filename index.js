@@ -2,7 +2,7 @@ var restify = require('restify');
 var mongoose = require('mongoose');
 var mongodb = require('./mongodb.js');
 
-var PORT = process.env.PORT || 8080;
+var PORT = process.env.PORT || 8081;
 
 var server = restify.createServer({
     name: 'prioriTzAPI'
